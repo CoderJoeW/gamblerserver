@@ -20,8 +20,8 @@ namespace GamblerServerCrossPlatform
 
             socket.NoDelay = true;
 
-            socket.ReceiveBufferSize = 4096;
-            socket.SendBufferSize = 4096;
+            socket.ReceiveBufferSize = 2048;
+            socket.SendBufferSize = 2048;
 
             myStream = socket.GetStream();
 
