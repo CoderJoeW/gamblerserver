@@ -89,9 +89,11 @@ namespace GamblerServerCrossPlatform
             int packageID = buffer.ReadInteger();
             string msg = buffer.ReadString();
 
-            Console.WriteLine("Connection id {0} is checking if thier account exists....Recieved {1} from user", connectionID,msg);
+            Console.WriteLine("Connection id {0} is checking if thier account exists", connectionID);
 
             PlayerModel player_info = Lib.FromJSON<PlayerModel>(msg);
+
+            Console.WriteLine("Connection id {0} ID is {1}", connectionID, player_info.Id);
 
             bool account_exists = Database.CheckAccountExist(player_info);
 
