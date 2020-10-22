@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 
 namespace GamblerServerCrossPlatform.Models
 {
+    [Serializable]
     public class PlayerModel
     {
-        public string Id { set; get; }
+        public string Id;
 
-        public string Username { set; get; }
+        public string Username;
 
-        public string Email { set; get; }
+        public string Email;
 
-        public string PaypalAddress { set; get; }
+        public string PaypalAddress;
 
-        public float Balance { set; get; }
+        public float Balance;
     }
 }
