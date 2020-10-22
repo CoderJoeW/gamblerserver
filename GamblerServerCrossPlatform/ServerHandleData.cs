@@ -95,14 +95,14 @@ namespace GamblerServerCrossPlatform
 
             bool account_exists = Database.CheckAccountExist(player_info);
 
-            if (account_exists)
+            /*if (account_exists)
             {
                 ServerTCP.PACKET_AccountExist(connectionID);
             }
             else
             {
                 ServerTCP.PACKET_AccountDoesNotExist(connectionID);
-            }
+            }*/
         }
 
         private static void HandleCreateAccount(int connectionID, byte[] data)
