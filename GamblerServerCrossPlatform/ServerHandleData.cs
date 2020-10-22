@@ -91,7 +91,7 @@ namespace GamblerServerCrossPlatform
 
             Console.WriteLine("Connection id {0} is checking if thier account exists....Recieved {1} from user", connectionID,msg);
 
-            //PlayerModel player_info = (PlayerModel)Lib.FromJSON(msg);
+            PlayerModel player_info = (PlayerModel)Lib.FromJSON(msg);
 
             /*bool account_exists = Database.CheckAccountExist(player_info);
 
