@@ -91,7 +91,7 @@ namespace GamblerServerCrossPlatform
 
             Console.WriteLine("Connection id {0} is checking if thier account exists....Recieved {1} from user", connectionID,msg);
 
-            object player_info = Lib.FromJSON(msg);
+            PlayerModel player_info = Lib.FromJSON<PlayerModel>(msg);
 
             /*bool account_exists = Database.CheckAccountExist(player_info);
 
@@ -114,7 +114,7 @@ namespace GamblerServerCrossPlatform
 
             Console.WriteLine("Connection id {0} is creating a new account", connectionID);
 
-            PlayerModel player_model = (PlayerModel)Lib.FromJSON(msg);
+            PlayerModel player_model = Lib.FromJSON<PlayerModel>(msg);
 
 
         }
@@ -128,7 +128,7 @@ namespace GamblerServerCrossPlatform
 
             Console.WriteLine("Connection id {0} is loading thier account data", connectionID);
 
-            PlayerModel player_info = (PlayerModel)Lib.FromJSON(msg);
+            PlayerModel player_info = Lib.FromJSON<PlayerModel>(msg);
 
             PlayerModel account_info = Database.LoadAccountInfo(player_info);
 

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using GamblerServerCrossPlatform.Models;
 
 namespace GamblerServerCrossPlatform.Helpers
 {
@@ -17,9 +18,9 @@ namespace GamblerServerCrossPlatform.Helpers
             return json;
         }
 
-        public static object FromJSON(string json)
+        public static T FromJSON<T>(string json)
         {
-            object model = JsonConvert.DeserializeObject(json);
+            object model = JsonConvert.DeserializeObject<T>(json);
 
             return model;
         }
