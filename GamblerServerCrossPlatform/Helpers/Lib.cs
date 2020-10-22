@@ -20,9 +20,9 @@ namespace GamblerServerCrossPlatform.Helpers
 
         public static T FromJSON<T>(string json)
         {
-            object model = JsonConvert.DeserializeObject<T>(json);
+            T model = JsonConvert.DeserializeObject<T>(json);
 
-            return model;
+            return (T)Convert.ChangeType(model, typeof(T));
         }
     }
 }
