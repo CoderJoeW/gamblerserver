@@ -93,7 +93,7 @@ namespace GamblerServerCrossPlatform
 
             PlayerModel player_info = Lib.FromJSON<PlayerModel>(msg);
 
-            /*bool account_exists = Database.CheckAccountExist(player_info);
+            bool account_exists = Database.CheckAccountExist(player_info);
 
             if (account_exists)
             {
@@ -102,7 +102,7 @@ namespace GamblerServerCrossPlatform
             else
             {
                 ServerTCP.PACKET_AccountDoesNotExist(connectionID);
-            }*/
+            }
         }
 
         private static void HandleCreateAccount(int connectionID, byte[] data)
