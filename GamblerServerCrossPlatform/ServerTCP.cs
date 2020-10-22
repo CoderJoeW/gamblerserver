@@ -1,10 +1,11 @@
-﻿using Better_Server.Helpers;
-using Better_Server.Models;
+﻿using GamblerServerCrossPlatform.Helpers;
+using GamblerServerCrossPlatform.Models;
 using System;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Better_Server {
+namespace GamblerServerCrossPlatform
+{
     class ServerTCP {
         private static TcpListener serverSocket;
 

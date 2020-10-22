@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Net.Sockets;
 
-namespace Better_Server {
+namespace GamblerServerCrossPlatform
+{
     public class ClientObject {
         public TcpClient socket;
         public NetworkStream myStream;

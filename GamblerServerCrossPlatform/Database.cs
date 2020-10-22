@@ -4,10 +4,11 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Better_Server.Models;
+using GamblerServerCrossPlatform.Models;
 using MySql.Data.MySqlClient;
 
-namespace Better_Server {
+namespace GamblerServerCrossPlatform
+{
     class Database {
         public static bool CheckAccountExist(PlayerModel player_info)
         {

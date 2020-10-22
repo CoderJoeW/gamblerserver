@@ -1,9 +1,10 @@
-﻿using Better_Server.Helpers;
-using Better_Server.Models;
+﻿using GamblerServerCrossPlatform.Helpers;
+using GamblerServerCrossPlatform.Models;
 using System;
 using System.Collections.Generic;
 
-namespace Better_Server {
+namespace GamblerServerCrossPlatform
+{
     public class ServerHandleData {
         public delegate void Packet_(int connectionID, byte[] data);
         public static Dictionary<int, Packet_> packetListener;

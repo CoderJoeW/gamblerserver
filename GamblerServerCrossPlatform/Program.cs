@@ -1,29 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace Better_Server {
-    class Program {
+namespace GamblerServerCrossPlatform
+{
+    class Program
+    {
         private static Thread consoleThread;
 
-        static void Main(string[] args) {
+        static void Main(string[] args)
+        {
             Console.WriteLine("Starting console thread");
             InitializeConsoleThread();
             ServerHandleData.InitializePacketListener();
             ServerTCP.InitializeServer();
         }
 
-        private static void InitializeConsoleThread() {
+        private static void InitializeConsoleThread()
+        {
             consoleThread = new Thread(ConsoleLoop);
             consoleThread.Name = "ConsoleThread";
             consoleThread.Start();
         }
 
-        private static void ConsoleLoop() {
-            while (true) {
+        private static void ConsoleLoop()
+        {
+            while (true)
+            {
 
             }
         }

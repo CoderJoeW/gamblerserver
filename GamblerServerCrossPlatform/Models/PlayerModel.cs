@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Better_Server.Models
+namespace GamblerServerCrossPlatform.Models
 {
     public class PlayerModel
     {

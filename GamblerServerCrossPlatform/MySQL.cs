@@ -1,7 +1,8 @@
 ﻿using System;
 using MySql.Data.MySqlClient;
 
-namespace Better_Server {
+namespace GamblerServerCrossPlatform
+{
     public class MySQL {
         public static MySQLSettings mySQLSettings;
 

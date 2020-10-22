@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace Better_Server.Helpers
+namespace GamblerServerCrossPlatform.Helpers
 {
     public static class Lib
     {
