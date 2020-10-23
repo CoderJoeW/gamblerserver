@@ -20,7 +20,7 @@ namespace GamblerServerCrossPlatform
         private static void InitializeMySQLServer() {
             MySQL.mySQLSettings.user = "game";
             MySQL.mySQLSettings.password = "l00k0u1";
-            MySQL.mySQLSettings.server = "35.225.52.164";
+            MySQL.mySQLSettings.server = "127.0.0.1";
             MySQL.mySQLSettings.database = "Gambler";
         }
 
