@@ -116,7 +116,9 @@ namespace GamblerServerCrossPlatform
 
             PlayerModel player_model = Lib.FromJSON<PlayerModel>(msg);
 
+            Database.CreateAccount(player_model);
 
+            ServerTCP.PACKET_AccountCreated(connectionID);
         }
 
         private static void HandleLoadAccountInfo(int connectionID, byte[] data)
