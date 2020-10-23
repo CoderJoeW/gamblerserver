@@ -130,18 +130,11 @@ namespace GamblerServerCrossPlatform
 
             Console.WriteLine("Connection id {0} is loading thier account data", connectionID);
 
-            try
-            {
-                PlayerModel player_info = Lib.FromJSON<PlayerModel>(msg);
+            PlayerModel player_info = Lib.FromJSON<PlayerModel>(msg);
 
-                PlayerModel account_info = Database.LoadAccountInfo(player_info);
+            PlayerModel account_info = Database.LoadAccountInfo(player_info);
 
-                ServerTCP.PACKET_AccountLoaded(connectionID, account_info);
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            ServerTCP.PACKET_AccountLoaded(connectionID, account_info);
         }
     }
 }

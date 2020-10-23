@@ -10,7 +10,7 @@ namespace GamblerServerCrossPlatform.Helpers
 {
     public static class Lib
     {
-        public static string ToJSON(object model)
+        public static string ToJSON<T>(T model)
         {
             string json = JsonConvert.SerializeObject(model);
 

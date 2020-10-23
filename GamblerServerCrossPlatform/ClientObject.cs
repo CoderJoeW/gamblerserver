@@ -48,7 +48,7 @@ namespace GamblerServerCrossPlatform
                 ServerHandleData.HandleData(connectionID, newBytes);
                 myStream.BeginRead(recieveBuffer, 0, socket.ReceiveBufferSize, ReceiveCallback, null);
             } catch (Exception e) {
-                //Database.LogError(e.Message);
+                Console.WriteLine(e.Message);
                 CloseConnection();
             }
         }
