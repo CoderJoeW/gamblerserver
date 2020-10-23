@@ -22,10 +22,10 @@ namespace GamblerServerCrossPlatform
 
         private static string CreateConnectionString() {
             var db = mySQLSettings;
-            string connectionString = "SERVER=" + db.server + ";" +
-                "DATABASE=" + db.database + ";" +
-                "UID=" + db.user + ";" +
-                "PASSWORD=" + db.password + ";";
+            string connectionString = "Server=" + db.server + ";" +
+                "Database=" + db.database + ";" +
+                "User Id=" + db.user + ";" +
+                "Password=" + db.password + ";";
             return connectionString;
         }
     }
