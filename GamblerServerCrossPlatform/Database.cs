@@ -21,18 +21,18 @@ namespace GamblerServerCrossPlatform
             {
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
-                    string exists = "";
+                    Int64 exists = 0;
 
                     while (reader.Read())
                     {
-                        exists = (string)reader["result"];
+                        exists = (Int64)reader["result"];
                     }
 
                     reader.Close();
 
                     conn.Close();
 
-                    return (exists == "0" ? false : true);
+                    return (exists == 0 ? false : true);
                 }
             }
         }
