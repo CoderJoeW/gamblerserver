@@ -9,14 +9,14 @@ namespace GamblerServerCrossPlatform.Models
     [Serializable]
     public class PlayerModel
     {
-        public System.String Id;
+        public string Id;
 
-        public System.String Username;
+        public string Username;
 
-        public System.String Email;
+        public string Email;
 
-        public System.String PaypalAddress;
+        public string PaypalAddress;
 
-        public System.String Balance;
+        public float Balance;
     }
 }
