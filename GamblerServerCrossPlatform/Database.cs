@@ -88,7 +88,7 @@ namespace GamblerServerCrossPlatform
                         player_info.Username = (string)reader["Username"];
                         player_info.Email = (string)reader["Email"];
                         player_info.PaypalAddress = (string)reader["PaypalAddress"];
-                        player_info.Balance = (float)reader["Balance"];
+                        player_info.Balance = float.Parse((string)reader["Balance"]);
                     }
 
                     reader.Close();
