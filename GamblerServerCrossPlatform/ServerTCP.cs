@@ -109,5 +109,15 @@ namespace GamblerServerCrossPlatform
             buffer.WriteString(error);
             SendDataTo(connectionID, buffer.ToArray());
         }
+
+        public static void PACKET_LobbyStart(int p1_connectionID, int p2_connectionID, string game_name)
+        {
+            ByteBuffer buffer = new ByteBuffer();
+            buffer.WriteInteger((int)ServerPackages.SLobbyStart);
+            buffer.WriteString(game_name);
+
+            SendDataTo(p1_connectionID, buffer.ToArray());
+            SendDataTo(p2_connectionID, buffer.ToArray());
+        }
     }
 }

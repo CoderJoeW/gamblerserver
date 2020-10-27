@@ -16,6 +16,7 @@ namespace GamblerServerCrossPlatform
             packetListener.Add((int)ClientPackages.CCreateAccount, HandleCreateAccount);
             packetListener.Add((int)ClientPackages.CLoadAccountInfo, HandleLoadAccountInfo);
             packetListener.Add((int)ClientPackages.CJoinLobby, HandleJoinLobby);
+            packetListener.Add((int)ClientPackages.CLeaveLobby, HandleLeaveLobby);
         }
 
         public static void HandleData(int connectionID, byte[] data) {
@@ -158,9 +159,34 @@ namespace GamblerServerCrossPlatform
                 return;
             }
 
-            int lobby_id = Database.GetLobby(game_name);
+            int lobby_id = Database.GetLobby(game_name,bet);
 
-            Console.WriteLine(lobby_id);
+            if(lobby_id == 0)
+            {
+                //Lobby does not exist creating new lobby
+                Database.CreateLobby(connectionID, actual_info, bet, game_name);
+            }
+            else
+            {
+                //Lobby already exist joining lobby
+                Database.JoinLobby(lobby_id, actual_info, connectionID);
+
+                LobbyModel lobby_info = Database.GetLobbyModel(lobby_id);
+
+                ServerTCP.PACKET_LobbyStart(lobby_info.Player1ConID, lobby_info.Player2ConID, game_name);
+
+                Database.StartLobby(lobby_id);
+            }
+        }
+
+        private static void HandleLeaveLobby(int connectionID,byte[] data)
+        {
+            ByteBuffer buffer = new ByteBuffer();
+            buffer.WriteBytes(data);
+            int packageID = buffer.ReadInteger();
+
+            Database.LeaveLobby(connectionID);
+
         }
     }
 }

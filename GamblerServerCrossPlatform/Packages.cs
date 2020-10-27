@@ -6,6 +6,7 @@
     SAccountCreated,
     SAccountLoaded,
     SLobbyJoinError,
+    SLobbyStart,
 }
 
 public enum ClientPackages
@@ -14,4 +15,5 @@ public enum ClientPackages
     CCreateAccount,
     CLoadAccountInfo,
     CJoinLobby,
+    CLeaveLobby,
 }
