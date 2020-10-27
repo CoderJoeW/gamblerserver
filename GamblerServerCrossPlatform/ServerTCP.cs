@@ -101,5 +101,13 @@ namespace GamblerServerCrossPlatform
             buffer.WriteString(Lib.ToJSON(player_info));
             SendDataTo(connectionID, buffer.ToArray());
         }
+
+        public static void PACKET_LobbyJoinError(int connectionID,string error)
+        {
+            ByteBuffer buffer = new ByteBuffer();
+            buffer.WriteInteger((int)ServerPackages.SLobbyJoinError);
+            buffer.WriteString(error);
+            SendDataTo(connectionID, buffer.ToArray());
+        }
     }
 }

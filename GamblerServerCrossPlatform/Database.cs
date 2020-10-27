@@ -44,6 +44,33 @@ namespace GamblerServerCrossPlatform
             ExecuteNonQuery(query);
         }
 
+        public static int GetLobby(string game_name)
+        {
+            string query = "SELECT Id FROM Lobbies WHERE Started='0' AND Game='" + game_name + "' ORDER BY Id ASC";
+
+            MySqlConnection conn = MySQL.GetConn();
+            conn.Open();
+
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+            {
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    int id = 0;
+
+                    while (reader.Read())
+                    {
+                        id = (int)reader["Id"];
+                    }
+
+                    reader.Close();
+
+                    conn.Close();
+
+                    return id;
+                }
+            }
+        } 
+
         public static PlayerModel LoadAccountInfo(PlayerModel player_info)
         {
             string query = "SELECT * FROM Player WHERE Id='" + player_info.Id + "'";

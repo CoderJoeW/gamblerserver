@@ -15,6 +15,7 @@ namespace GamblerServerCrossPlatform
             packetListener.Add((int)ClientPackages.CCheckAccountExist, HandleCheckAccountExist);
             packetListener.Add((int)ClientPackages.CCreateAccount, HandleCreateAccount);
             packetListener.Add((int)ClientPackages.CLoadAccountInfo, HandleLoadAccountInfo);
+            packetListener.Add((int)ClientPackages.CJoinLobby, HandleJoinLobby);
         }
 
         public static void HandleData(int connectionID, byte[] data) {
@@ -135,6 +136,31 @@ namespace GamblerServerCrossPlatform
             PlayerModel account_info = Database.LoadAccountInfo(player_info);
 
             ServerTCP.PACKET_AccountLoaded(connectionID, account_info);
+        }
+
+        private static void HandleJoinLobby(int connectionID, byte[] data)
+        {
+            ByteBuffer buffer = new ByteBuffer();
+            buffer.WriteBytes(data);
+            int packageID = buffer.ReadInteger();
+            string msg = buffer.ReadString();
+            float bet = buffer.ReadFloat();
+            string game_name = buffer.ReadString();
+
+
+            PlayerModel player_info = Lib.FromJSON<PlayerModel>(msg);
+
+            PlayerModel actual_info = Database.LoadAccountInfo(player_info);
+
+            if(actual_info.Balance < bet)
+            {
+                ServerTCP.PACKET_LobbyJoinError(connectionID, "Insufficient Balance");
+                return;
+            }
+
+            int lobby_id = Database.GetLobby(game_name);
+
+            Console.WriteLine(lobby_id);
         }
     }
 }
