@@ -91,7 +91,7 @@ namespace GamblerServerCrossPlatform
                         lobby_info.Player1ConID = (int)reader["Player1ConID"];
                         lobby_info.Player2Id = (int)reader["Player2Id"];
                         lobby_info.Player2ConID = (int)reader["Player2ConID"];
-                        lobby_info.Bet = (int)reader["Bet"];
+                        lobby_info.Bet = int.Parse((string)reader["Bet"]);
                         lobby_info.Game = (string)reader["Game"];
                     }
 
