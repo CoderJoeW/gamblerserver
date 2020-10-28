@@ -9,11 +9,11 @@ namespace GamblerServerCrossPlatform.Models
     {
         public int Id;
 
-        public int Player1Id;
+        public string Player1Id;
 
         public int Player1ConID;
 
-        public int Player2Id;
+        public string Player2Id;
 
         public int Player2ConID;
 
