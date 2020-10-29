@@ -110,14 +110,34 @@ namespace GamblerServerCrossPlatform
             SendDataTo(connectionID, buffer.ToArray());
         }
 
-        public static void PACKET_LobbyStart(int p1_connectionID, int p2_connectionID, string game_name)
+        public static void PACKET_LobbyStart(int p1_connectionID, int p2_connectionID, string game_name,int lobby_id)
         {
             ByteBuffer buffer = new ByteBuffer();
             buffer.WriteInteger((int)ServerPackages.SLobbyStart);
             buffer.WriteString(game_name);
 
+            LobbyModel lobby_info = Database.GetLobbyModel(lobby_id);
+
+            PlayerModel p1_info = Database.LoadAccountInfo(lobby_info.Player1Id);
+            PlayerModel p2_info = Database.LoadAccountInfo(lobby_info.Player2Id);
+
+            p1_info.Balance -= float.Parse(lobby_info.Bet.ToString());
+            p2_info.Balance -= float.Parse(lobby_info.Bet.ToString());
+
+            Database.SavePlayerInfo(p1_info);
+            Database.SavePlayerInfo(p2_info);
+
             SendDataTo(p1_connectionID, buffer.ToArray());
             SendDataTo(p2_connectionID, buffer.ToArray());
+        }
+
+        public static void PACKET_PlayerDisconnected(int connectionID,PlayerType pt)
+        {
+            ByteBuffer buffer = new ByteBuffer();
+            buffer.WriteInteger((int)ServerPackages.SPlayerDisconnected);
+            buffer.WriteInteger((int)pt);
+
+            SendDataTo(connectionID, buffer.ToArray());
         }
     }
 }

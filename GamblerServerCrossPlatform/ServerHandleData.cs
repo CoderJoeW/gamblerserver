@@ -12,6 +12,7 @@ namespace GamblerServerCrossPlatform
 
         public static void InitializePacketListener() {
             packetListener = new Dictionary<int, Packet_>();
+            packetListener.Add((int)ClientPackages.CAbortConnection, HandleAbortConnection);
             packetListener.Add((int)ClientPackages.CCheckAccountExist, HandleCheckAccountExist);
             packetListener.Add((int)ClientPackages.CCreateAccount, HandleCreateAccount);
             packetListener.Add((int)ClientPackages.CLoadAccountInfo, HandleLoadAccountInfo);
@@ -83,6 +84,43 @@ namespace GamblerServerCrossPlatform
             if (packetListener.TryGetValue(packageID, out Packet_ packet)) {
                 packet.Invoke(connectionID, data);
             }
+        }
+
+        private static void HandleAbortConnection(int connectionID, byte[] data)
+        {
+            ByteBuffer buffer = new ByteBuffer();
+            buffer.WriteBytes(data);
+            int packageID = buffer.ReadInteger();
+            string msg = buffer.ReadString();
+
+            Console.WriteLine("Connection id {0} has aborted thier connection", connectionID);
+
+            PlayerModel player_info = Lib.FromJSON<PlayerModel>(msg);
+
+            //Check if the player was in any lobbies
+            bool in_lobby = Database.IsInLobby(player_info);
+
+            if (in_lobby)
+            {
+                LobbyModel lobby_info = Database.GetLobbyModel(player_info);
+
+                //If player is player1 we need to send disconnected packet to other player
+                if(lobby_info.Player1Id == player_info.Id)
+                {
+                    if (!String.IsNullOrEmpty(lobby_info.Player2Id))
+                    {
+                        ServerTCP.PACKET_PlayerDisconnected(lobby_info.Player2ConID,PlayerType.Host);
+                    }
+                }
+                else
+                {
+                    //if we are not player1 just leave the match
+                    //And notify the host we left
+                    ServerTCP.PACKET_PlayerDisconnected(lobby_info.Player1ConID,PlayerType.Player);
+                }
+            }
+
+            Console.WriteLine("Connection id {0} has been successfull disconnected from the server", connectionID);
         }
 
         private static void HandleCheckAccountExist(int connectionID, byte[] data) {
@@ -173,7 +211,7 @@ namespace GamblerServerCrossPlatform
 
                 LobbyModel lobby_info = Database.GetLobbyModel(lobby_id);
 
-                ServerTCP.PACKET_LobbyStart(lobby_info.Player1ConID, lobby_info.Player2ConID, game_name);
+                ServerTCP.PACKET_LobbyStart(lobby_info.Player1ConID, lobby_info.Player2ConID, game_name,lobby_id);
 
                 Database.StartLobby(lobby_id);
             }

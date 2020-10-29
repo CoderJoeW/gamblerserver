@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using GamblerServerCrossPlatform.Models;
 using MySql.Data.MySqlClient;
@@ -10,6 +11,7 @@ using MySql.Data.MySqlClient;
 namespace GamblerServerCrossPlatform
 {
     class Database {
+        #region Account Specific
         public static bool CheckAccountExist(PlayerModel player_info)
         {
             string query = "SELECT COUNT(1) as result FROM Player WHERE Id='" + player_info.Id + "'";
@@ -44,9 +46,9 @@ namespace GamblerServerCrossPlatform
             ExecuteNonQuery(query);
         }
 
-        public static int GetLobby(string game_name, float bet)
+        public static PlayerModel LoadAccountInfo(PlayerModel player_info)
         {
-            string query = "SELECT Id FROM Lobbies WHERE Started='0' AND Game='" + game_name + "' AND Bet='" + bet + "' ORDER BY Id ASC LIMIT 1";
+            string query = "SELECT * FROM Player WHERE Id='" + player_info.Id + "'";
 
             MySqlConnection conn = MySQL.GetConn();
             conn.Open();
@@ -55,21 +57,90 @@ namespace GamblerServerCrossPlatform
             {
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
-                    int id = 0;
+                    while (reader.Read())
+                    {
+                        player_info.Id = (string)reader["Id"];
+                        player_info.Username = (string)reader["Username"];
+                        player_info.Email = (string)reader["Email"];
+                        player_info.PaypalAddress = (string)reader["PaypalAddress"];
+                        player_info.Balance = float.Parse((string)reader["Balance"]);
+                    }
+
+                    reader.Close();
+                    conn.Close();
+
+                    return player_info;
+                }
+            }
+        }
+
+        public static PlayerModel LoadAccountInfo(string player_id)
+        {
+            string query = "SELECT * FROM Player WHERE Id='" + player_id + "'";
+
+            PlayerModel player_info = new PlayerModel();
+
+            MySqlConnection conn = MySQL.GetConn();
+            conn.Open();
+
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+            {
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        player_info.Id = (string)reader["Id"];
+                        player_info.Username = (string)reader["Username"];
+                        player_info.Email = (string)reader["Email"];
+                        player_info.PaypalAddress = (string)reader["PaypalAddress"];
+                        player_info.Balance = float.Parse((string)reader["Balance"]);
+                    }
+
+                    reader.Close();
+                    conn.Close();
+
+                    return player_info;
+                }
+            }
+        }
+
+        public static void SavePlayerInfo(PlayerModel player_info)
+        {
+            string query = "UPDATE Player SET Username='" + player_info.Username + "', Email='" + player_info.Email + "',PaypalAddress='" + player_info.PaypalAddress + "',Balance='" + player_info.Balance + "' WHERE Id='" + player_info.Id + "'";
+
+            ExecuteNonQuery(query);
+        }
+
+        #endregion
+
+        #region Lobby Specific
+
+        public static bool IsInLobby(PlayerModel player_info)
+        {
+            string query = "SELECT COUNT(1) as result FROM Lobbies WHERE Player1Id='" + player_info.Id + "' OR Player2Id='" + player_info.Id + "'";
+
+            MySqlConnection conn = MySQL.GetConn();
+            conn.Open();
+
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+            {
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    Int64 exists = 0;
 
                     while (reader.Read())
                     {
-                        id = (int)reader["Id"];
+                        exists = (Int64)reader["result"];
                     }
 
                     reader.Close();
 
                     conn.Close();
 
-                    return id;
+                    return (exists == 0 ? false : true);
                 }
             }
-        } 
+        }
 
         public static LobbyModel GetLobbyModel(int lobby_id)
         {
@@ -104,6 +175,66 @@ namespace GamblerServerCrossPlatform
             }
         }
 
+        public static LobbyModel GetLobbyModel(PlayerModel player_info)
+        {
+            string query = "SELECT * FROM Lobbies WHERE Player1Id='" + player_info.Id + "' OR Player2Id='" + player_info.Id + "'";
+
+            MySqlConnection conn = MySQL.GetConn();
+            conn.Open();
+
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+            {
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    LobbyModel lobby_info = new LobbyModel();
+
+                    while (reader.Read())
+                    {
+                        lobby_info.Id = (int)reader["Id"];
+                        lobby_info.Player1Id = (string)reader["Player1Id"];
+                        lobby_info.Player1ConID = (int)reader["Player1ConID"];
+                        lobby_info.Player2Id = (string)reader["Player2Id"];
+                        lobby_info.Player2ConID = (int)reader["Player2ConID"];
+                        lobby_info.Bet = int.Parse((string)reader["Bet"]);
+                        lobby_info.Game = (string)reader["Game"];
+                    }
+
+                    reader.Close();
+
+                    conn.Close();
+
+                    return lobby_info;
+                }
+            }
+        }
+
+        public static int GetLobby(string game_name, float bet)
+        {
+            string query = "SELECT Id FROM Lobbies WHERE Started='0' AND Game='" + game_name + "' AND Bet='" + bet + "' ORDER BY Id ASC LIMIT 1";
+
+            MySqlConnection conn = MySQL.GetConn();
+            conn.Open();
+
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+            {
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    int id = 0;
+
+                    while (reader.Read())
+                    {
+                        id = (int)reader["Id"];
+                    }
+
+                    reader.Close();
+
+                    conn.Close();
+
+                    return id;
+                }
+            }
+        } 
+
         public static void CreateLobby(int connectionID,PlayerModel player_info,float bet_amount,string game_name)
         {
             string query = "INSERT INTO Lobbies SET Player1Id='"  + player_info.Id +  "', Player1ConID='"  + connectionID +  "', Bet='"  + bet_amount +  "', Game='"  + game_name +  "'";
@@ -132,42 +263,9 @@ namespace GamblerServerCrossPlatform
             ExecuteNonQuery(query);
         }
 
-        public static PlayerModel LoadAccountInfo(PlayerModel player_info)
-        {
-            string query = "SELECT * FROM Player WHERE Id='" + player_info.Id + "'";
+        #endregion
 
-            MySqlConnection conn = MySQL.GetConn();
-            conn.Open();
-
-            using(MySqlCommand cmd = new MySqlCommand(query, conn))
-            {
-                using(MySqlDataReader reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        player_info.Id = (string)reader["Id"];
-                        player_info.Username = (string)reader["Username"];
-                        player_info.Email = (string)reader["Email"];
-                        player_info.PaypalAddress = (string)reader["PaypalAddress"];
-                        player_info.Balance = float.Parse((string)reader["Balance"]);
-                    }
-
-                    reader.Close();
-                    conn.Close();
-
-                    return player_info;
-                }
-            }
-        }
-
-        public static void LogError(string errorMessage) {
-            String timeStamp = lib.GetTimestamp(DateTime.Now);
-            string query = "INSERT INTO error_logs SET error='" + errorMessage + "', timestamp='" + timeStamp + "'";
-            
-            Console.WriteLine("CUSTOM ERROR MESSAGE: " + errorMessage);
-
-            ExecuteNonQuery(query);
-        }
+        #region Helpers
 
         private static void ExecuteNonQuery(string query)
         {
@@ -188,5 +286,7 @@ namespace GamblerServerCrossPlatform
 
             conn.Close();
         }
+
+        #endregion
     }
 }

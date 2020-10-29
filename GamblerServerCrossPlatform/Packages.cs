@@ -7,11 +7,13 @@
     SAccountLoaded,
     SLobbyJoinError,
     SLobbyStart,
+    SPlayerDisconnected,
 }
 
 public enum ClientPackages
 {
-    CCheckAccountExist = 1,
+    CAbortConnection = 1,
+    CCheckAccountExist,
     CCreateAccount,
     CLoadAccountInfo,
     CJoinLobby,
