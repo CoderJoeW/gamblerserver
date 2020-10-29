@@ -280,7 +280,7 @@ namespace GamblerServerCrossPlatform
                 }
                 catch (Exception e)
                 {
-                    Database.LogError(e.Message);
+                    Console.WriteLine(e.Message);
                 }
             }
 
